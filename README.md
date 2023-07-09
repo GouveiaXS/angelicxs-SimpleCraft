@@ -17,3 +17,5 @@ Has the following features:
     - Each location can have as many item categories (or combination of categories) as desired
 - Able to organize item lists into categories to allow easy input into locations
 - Can easily change settings for each craftable item
+
+V1.1 - Can now spawn props at location.
