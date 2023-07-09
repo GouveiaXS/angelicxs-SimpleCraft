@@ -2,6 +2,7 @@ ESX = nil
 QBcore = nil
 PlayerData = nil
 local PlayerJob = nil
+local spawnedTables = {}
 
 CreateThread(function()
     if Config.UseESX then
@@ -126,6 +127,34 @@ CreateThread(function()
                     end)
                 end
             end
+        end
+    end
+end)
+
+CreateThread(function()
+    for Category, Data in pairs(Config.LocationInfo) do
+        local loc = Data.Location
+        if Data.SpawnTableProp then
+            CreateThread(function()
+                spawnedTables[loc] = false
+                while true do
+                    local sleep = 3000
+                    local dist = #(GetEntityCoords(PlayerPedId())-vector3(loc.x,loc.y,loc.z))
+                    if dist <= 50 then
+                        sleep = 1000
+                        if dist <= 25 then
+                            if not DoesEntityExist(spawnedTables[loc]) then
+                                spawnedTables[loc] = CreateObject(Config.PropName, loc.x, loc.y, loc.z-1, true, true, false)
+                                SetEntityHeading(spawnedTables[loc], loc.w)
+                                FreezeEntityPosition(spawnedTables[loc], true)
+                            end
+                        end
+                    elseif DoesEntityExist(spawnedTables[loc]) then
+                        DeleteEntity(spawnedTables[loc])
+                    end
+                    Wait(sleep)
+                end
+            end)
         end
     end
 end)
@@ -393,6 +422,11 @@ AddEventHandler('onResourceStop', function(resource)
                         end 
                     end
                 end
+            end
+        end
+        for k,v in pairs(spawnedTables)do
+            if DoesEntityExist(v) then
+                DeleteEntity(v)
             end
         end
     end
