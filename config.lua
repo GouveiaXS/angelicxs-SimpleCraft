@@ -27,6 +27,7 @@ Config.OXLib = false						-- Use the OX_lib (Ignored if Config.NHInput or Config
 Config.UseThirdEye = true					-- If true, allows use of third eye
 Config.ThirdEyeName = 'qb-target'			-- If Config.UseThirdEye = true, name of third eye program
 Config.Show3DText = true					-- If true, will show 3D text when near crafting point.
+Config.PropName =  'prop_tool_bench02'		-- Name of prop is used for location.
 
 --[[
 	EXAMPLE/TEMPLATE OF CONFIGS MENU
@@ -110,6 +111,7 @@ Config.LocationInfo = {
 		},
 		RequireMenuItem = false,
 		RequiredMenuItemName = 'weapon_pistol',
+		SpawnTableProp = true,
 	},
 	[2] = {
 		Location = vector4(1687.59, -1618.28, 112.49, 7.51),
@@ -118,6 +120,7 @@ Config.LocationInfo = {
 		},
 		RequireMenuItem = false,
 		RequiredMenuItemName = 'weapon_pistol',
+		SpawnTableProp = true,
 	},
 }
 
