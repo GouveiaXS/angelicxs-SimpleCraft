@@ -193,8 +193,10 @@ RegisterNetEvent('angelicxs-SimpleCraft:CategoryMenu', function(Data, Dist)
                 })
         elseif Config.OXLib then
             table.insert(menu, {
-                label = Data.Categories[i],
-                args = { data = Data.Categories[i], selection = 1}
+                title = Data.Categories[i],
+                onSelect = function()
+                    TriggerEvent("angelicxs-SimpleCraft:CraftMenu", Data.Categories[i])
+                end,
             })
         end
 
@@ -212,20 +214,14 @@ RegisterNetEvent('angelicxs-SimpleCraft:CategoryMenu', function(Data, Dist)
         })
         TriggerEvent("qb-menu:client:openMenu", menu)
     elseif Config.OXLib then
-        table.insert(menu, {
-            label = Config.Lang['cancel'],
-        })
-        lib.registerMenu({
+        lib.registerContext({
             id = 'SimpleCraftCategorymenu_ox',
             title = Config.Lang['menu_header'],
             options = menu,
             position = 'top-right',
         }, function(selected, scrollIndex, args)
-            if args.selection == 1 then
-                TriggerEvent("angelicxs-SimpleCraft:CraftMenu", args.data)
-            end
         end)
-        lib.showMenu('SimpleCraftCategorymenu_ox')
+        lib.showContext('SimpleCraftCategorymenu_ox')
     end
 end)
 
@@ -269,8 +265,10 @@ RegisterNetEvent('angelicxs-SimpleCraft:CraftMenu', function(Data)
             })
         elseif Config.OXLib then
             table.insert(menu, {
-                label = item,
-                args = { data = data, selection = 1}
+                title = item,
+                onSelect = function()
+                    TriggerEvent("angelicxs-SimpleCraft:CraftItemList", data)
+                end,
             })
         end
     end
@@ -287,20 +285,15 @@ RegisterNetEvent('angelicxs-SimpleCraft:CraftMenu', function(Data)
         })
         TriggerEvent("qb-menu:client:openMenu", menu)
     elseif Config.OXLib then
-        table.insert(menu, {
-            label = Config.Lang['cancel'],
-        })
-        lib.registerMenu({
+        lib.registerContext({
             id = 'SimpleCraftItemmenu_ox',
             title = Config.Lang['menu_header_items'],
             options = menu,
+            menu = 'SimpleCraftCategorymenu_ox',
             position = 'top-right',
         }, function(selected, scrollIndex, args)
-            if args.selection == 1 then
-                TriggerEvent("angelicxs-SimpleCraft:CraftItemList", args.data)
-            end
         end)
-        lib.showMenu('SimpleCraftItemmenu_ox')
+        lib.showContext('SimpleCraftItemmenu_ox')
     end
 end)
 
@@ -313,6 +306,7 @@ RegisterNetEvent('angelicxs-SimpleCraft:CraftItemList', function(data)
         local name = tostring(short.label..' x'..short.quantity..'\n')
         requirement = tostring(requirement..name)
     end
+    print('craftitme list'..requirement)
     if Config.NHMenu then
         table.insert(menu, {
             header = requirement,
@@ -346,27 +340,25 @@ RegisterNetEvent('angelicxs-SimpleCraft:CraftItemList', function(data)
         TriggerEvent("qb-menu:client:openMenu", menu)
     elseif Config.OXLib then
         table.insert(menu, {
-            label = Config.Lang['confirm'],
-            args = { data = data, selection = 1}
+            title = Config.Lang['confirm'],
+            onSelect = function()
+                TriggerEvent("angelicxs-SimpleCraft:CraftItem", data)
+            end,
         })
-        table.insert(menu, {
-            label = Config.Lang['cancel'],
-        })
-        lib.registerMenu({
+        lib.registerContext({
             id = 'SimpleCraftItemConf_ox',
-            title = requirement,
             options = menu,
+            menu = 'SimpleCraftItemmenu_ox',
+            title = requirement,
             position = 'top-right',
         }, function(selected, scrollIndex, args)
-            if args.selection == 1 then
-                TriggerEvent("angelicxs-SimpleCraft:CraftItem", args.data)
-            end
         end)
-        lib.showMenu('SimpleCraftItemConf_ox')
+        lib.showContext('SimpleCraftItemConf_ox')
     end
 end)
 
 RegisterNetEvent('angelicxs-SimpleCraft:CraftItem', function(Data)
+    print('craftingitem')
     if not Data.NumberReceived then return end
     TriggerServerEvent('angelicxs-SimpleCraft:Server:CraftItem', Data)
 end)
