@@ -306,7 +306,6 @@ RegisterNetEvent('angelicxs-SimpleCraft:CraftItemList', function(data)
         local name = tostring(short.label..' x'..short.quantity..'\n')
         requirement = tostring(requirement..name)
     end
-    print('craftitme list'..requirement)
     if Config.NHMenu then
         table.insert(menu, {
             header = requirement,
@@ -358,7 +357,6 @@ RegisterNetEvent('angelicxs-SimpleCraft:CraftItemList', function(data)
 end)
 
 RegisterNetEvent('angelicxs-SimpleCraft:CraftItem', function(Data)
-    print('craftingitem')
     if not Data.NumberReceived then return end
     TriggerServerEvent('angelicxs-SimpleCraft:Server:CraftItem', Data)
 end)
